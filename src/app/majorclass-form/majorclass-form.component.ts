@@ -7,22 +7,23 @@ import { NgForm } from '@angular/forms';
 import { DataService } from '../data.service'
 
 @Component({
-  selector: 'app-student-form',
-  templateUrl: './student-form.component.html',
-  styleUrls: ['./student-form.component.css']
+  selector: 'app-majorclass-form',
+  templateUrl: './majorclass-form.component.html',
+  styleUrls: ['./majorclass-form.component.css']
 })
-export class StudentFormComponent implements OnInit {
+export class MajorclassFormComponent implements OnInit {
 
   successMessage: string;
   errorMessage: string;
 
-  student: object;
+  majorclass: object;
   majors;
+  klasses;
 
   getRecordForEdit(){
     this.route.params
-      .switchMap((params: Params) => this.dataService.getRecord("student", +params['id']))
-      .subscribe(student => this.student = student);
+      .switchMap((params: Params) => this.dataService.getRecord("majorclass", +params['id']))
+      .subscribe(majorclass => this.majorclass = majorclass);
   }
 
   constructor(
@@ -37,7 +38,8 @@ export class StudentFormComponent implements OnInit {
         (+params['id']) ? this.getRecordForEdit() : null;
       });
 
-      this.getMajors();
+    this.getMajors();
+    this.getClasses();
 
   }
 
@@ -48,22 +50,27 @@ export class StudentFormComponent implements OnInit {
         error =>  this.errorMessage = <any>error);
   }
 
-  saveStudent(student: NgForm){
-    if(typeof student.value.student_id === "number"){
-      this.dataService.editRecord("student", student.value, student.value.student_id)
+  getClasses() {
+    this.dataService.getRecords("class")
+      .subscribe(
+        klass => this.klasses= klass,
+        error =>  this.errorMessage = <any>error);
+  }
+
+  saveMajorclass(majorclass: NgForm){
+    if(typeof majorclass.value.major_class_id === "number"){
+      this.dataService.editRecord("majorclass", majorclass.value, majorclass.value.major_class_id)
           .subscribe(
-            student => this.successMessage = "Record updated succesfully",
+            majorclass => this.successMessage = "Record updated succesfully",
             error =>  this.errorMessage = <any>error);
     }else{
-      this.dataService.addRecord("student", student.value)
+      this.dataService.addRecord("majorclass", majorclass.value)
           .subscribe(
             student => this.successMessage = "Record added succesfully",
             error =>  this.errorMessage = <any>error);
-            this.student = {};
+            this.majorclass = {};
     }
 
   }
-
-
 
 }

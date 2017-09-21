@@ -1,0 +1,56 @@
+<ol class="breadcrumb">
+  <li><a routerLink="/home">Home</a></li>
+  <li><a routerLink="/klass">Classes</a></li>
+  <li class="active">Manage Classes</li>
+</ol>
+
+<br/>
+
+<a class="btn btn-primary" routerLink="/klass">Return to Classes</a>
+
+<h1>Manage Classes</h1>
+
+<app-status-message [successMessage]="successMessage" [errorMessage]="errorMessage"></app-status-message>
+
+<form novalidate (ngSubmit)="saveKlass(klassForm)"  #klassForm="ngForm" class="form-horizontal">
+<input [ngModel]="klass?.class_id" ngModel #class_id="ngModel" type="hidden" name="class_id">
+
+<div class="form-group">
+    <label for="instructor_id" class="col-sm-2 control-label">Instructor</label>
+    <div class="col-sm-10">
+      <select name="instructor_id" ngModel #instructor_id="ngModel" [ngModel]="klass?.instructor?.instructor_id">
+        <option *ngFor="let instructor of instructors" value="{{instructor.instructor_id}}">
+          {{instructor.first_name}} {{instructor.last_name}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+
+
+<!-- code before drop down -->
+<!-- <div class="form-group">
+  <label for="instructor_id" class="col-sm-2 control-label">Instructor ID</label>
+  <div class="col-sm-10">
+    <input [ngModel]="klass?.instructor?.instructor_id" ngModel #instructor_id="ngModel" type="text" class="form-control" id="instructor_id" name="instructor_id" placeholder="Instructor ID" required>
+  </div>
+</div> -->
+
+<div class="form-group">
+  <label for="subject" class="col-sm-2 control-label">Subject</label>
+  <div class="col-sm-10">
+    <input [ngModel]="klass?.subject" ngModel #subject="ngModel" type="text" class="form-control" id="subject" name="subject"  placeholder="History" required>
+  </div>
+</div>
+<div class="form-group">
+  <label for="course" class="col-sm-2 control-label">Course</label>
+  <div class="col-sm-10">
+    <input [ngModel]="klass?.course" ngModel #course="ngModel" type="text" class="form-control" id="course" name="course" placeholder="103" required>
+  </div>
+</div>
+ <div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</div>
+</form>
