@@ -1,3 +1,4 @@
+<section @fadeInAnimation>
 <ol class="breadcrumb">
   <li><a routerLink="/home">Home</a></li>
   <li><a routerLink="/assignment">Assignments</a></li>
@@ -12,7 +13,7 @@
 
 <app-status-message [successMessage]="successMessage" [errorMessage]="errorMessage"></app-status-message>
 
-<form novalidate (ngSubmit)="saveAssignment(assignmentForm)"  #assignmentForm="ngForm" class="form-horizontal">
+<form (ngSubmit)="saveAssignment(assignmentForm)"  #assignmentForm="ngForm" class="form-horizontal">
 <input [ngModel]="assignment?.assignment_id" ngModel #assignment_id="ngModel" type="hidden" name="assignment_id">
 
 
@@ -38,7 +39,10 @@
 <div class="form-group">
   <label for="assignment_nbr" class="col-sm-2 control-label">Assignment Number</label>
   <div class="col-sm-10">
-    <input [ngModel]="assignment?.assignment_nbr" ngModel #assignment_nbr="ngModel" type="text" class="form-control" id="assignment_nbr" name="assignment_nbr"  placeholder="Assignment Number" required>
+    <input [ngModel]="assignment?.assignment_nbr" ngModel #assignment_nbr="ngModel" type="number" class="form-control" id="assignment_nbr" name="assignment_nbr"  placeholder="Assignment Number" required>
+    <span *ngIf="formErrors.assignment_nbr" class="text-danger">
+      {{ formErrors.assignment_nbr }}
+    </span>
   </div>
 </div>
 
@@ -87,7 +91,8 @@
 
  <div class="form-group">
   <div class="col-sm-offset-2 col-sm-10">
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" [disabled]="!assignmentForm.form.valid" class="btn btn-primary">Submit</button>
   </div>
 </div>
 </form>
+</section>

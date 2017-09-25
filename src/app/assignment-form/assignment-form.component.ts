@@ -1,15 +1,17 @@
 import 'rxjs/add/operator/switchMap';
-import { Component, OnInit }      from '@angular/core';
+import { Component, OnInit, ViewChild }      from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location }               from '@angular/common';
 import { NgForm } from '@angular/forms';
 
 import { DataService } from '../data.service'
+import { fadeInAnimation } from '../animations/fade_in.animation';
 
 @Component({
   selector: 'app-assignment-form',
   templateUrl: './assignment-form.component.html',
-  styleUrls: ['./assignment-form.component.css']
+  styleUrls: ['./assignment-form.component.css'],
+  animations: [fadeInAnimation]
 })
 export class AssignmentFormComponent implements OnInit {
 
@@ -20,6 +22,9 @@ export class AssignmentFormComponent implements OnInit {
   students;
   grades;
   klasses;
+
+  assignmentForm: NgForm;
+  @ViewChild('assignmentForm') currentForm: NgForm;
 
   getRecordForEdit(){
     this.route.params
@@ -80,5 +85,46 @@ export class AssignmentFormComponent implements OnInit {
     }
 
   }
+
+  ngAfterViewChecked() {
+    this.formChanged();
+  }
+
+  formChanged() {
+    //if the form didn't change then do nothing
+    if (this.currentForm === this.assignmentForm) { return; }
+    //set the form to the current form for comparison
+    this.assignmentForm = this.currentForm;
+    //subscribe to form changes and send the changes to the onValueChanged method
+    this.assignmentForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+  }
+
+  onValueChanged(data?: any) {
+    let form = this.assignmentForm.form;
+
+    for (const field in this.formErrors) {
+      // clear previous error message (if any)
+      this.formErrors[field] = '';
+      const control = form.get(field);
+
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field];
+        for (const key in control.errors) {
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  formErrors = {
+    'assignment_nbr': ''
+  };
+
+  validationMessages = {
+    'assignment_nbr': {
+      'required':  'Assignment Number is required.' 
+    }
+  };
 
 }
