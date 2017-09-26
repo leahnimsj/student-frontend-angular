@@ -64,7 +64,7 @@
 <div class="form-group">
   <label for="tenured" class="col-sm-2 control-label">Tenured?</label>
   <div class="col-sm-10">
-    <input [ngModel]="instructor?.tenured" ngModel #tenured="ngModel" type="number" class="form-control" id="tenured" name="tenured" placeholder="Tenured" max=1 min="0">
+    <input [ngModel]="instructor?.tenured" ngModel #tenured="ngModel" type="number" class="form-control" id="tenured" name="tenured" placeholder="Tenured" max="1" min="0">
     <span *ngIf="formErrors.tenured" class="text-danger">
       {{ formErrors.tenured }}
     </span>
